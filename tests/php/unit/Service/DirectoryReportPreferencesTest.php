@@ -74,6 +74,7 @@ $prefs->save($user, [
         'personalEmail' => true,
         'personalWorkEmail' => true,
         'photo' => true,
+        'classification' => true,
     ],
     'customFieldOrders' => [],
 ]);
@@ -98,6 +99,7 @@ Assert::same([1], $loaded['headRoles']);
 Assert::same([2], $loaded['spouseRoles']);
 Assert::true($loaded['excludeInactive']);
 Assert::true($loaded['show']['address']);
+Assert::true($loaded['show']['classification'], 'classification toggle must round-trip');
 Assert::false($loaded['show']['mailing']);
 
 $prefs->clear($user);

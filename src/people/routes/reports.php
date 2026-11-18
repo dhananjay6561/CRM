@@ -129,6 +129,7 @@ function postPeopleDirectory(Request $request, Response $response): Response
         'personalEmail' => $flag('bDirPersonalEmail'),
         'personalWorkEmail' => $flag('bDirPersonalWorkEmail'),
         'photo' => $flag('bDirPhoto'),
+        'classification' => $flag('bDirClassification'),
     ];
     $customFieldOrders = [];
     foreach (array_keys($post) as $name) {

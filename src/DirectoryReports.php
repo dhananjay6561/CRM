@@ -73,6 +73,7 @@ $showFieldMap = [
     'bDirPersonalEmail' => 'personalEmail',
     'bDirPersonalWorkEmail' => 'personalWorkEmail',
     'bDirPhoto' => 'photo',
+    'bDirClassification' => 'classification',
 ];
 
 $resetOptionsHref = SystemURLs::getRootPath() . '/DirectoryReports.php?resetDirectoryOptions=1'
@@ -161,6 +162,7 @@ $resetOptionsHref = SystemURLs::getRootPath() . '/DirectoryReports.php?resetDire
               'bDirPersonalEmail'  => ['label' => gettext('Personal Email'), 'checked' => true],
               'bDirPersonalWorkEmail' => ['label' => gettext('Personal Work/Other Email'), 'checked' => true],
               'bDirPhoto'          => ['label' => gettext('Photos'), 'checked' => true],
+              'bDirClassification' => ['label' => gettext('Classification'), 'checked' => false],
           ];
           foreach ($checkFields as $name => $field) :
               $showKey = $showFieldMap[$name];

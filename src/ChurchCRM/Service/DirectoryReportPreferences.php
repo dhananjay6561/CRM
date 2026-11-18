@@ -39,6 +39,7 @@ class DirectoryReportPreferences
         'personalEmail',
         'personalWorkEmail',
         'photo',
+        'classification',
     ];
 
     private const MAX_VALUE = 50;

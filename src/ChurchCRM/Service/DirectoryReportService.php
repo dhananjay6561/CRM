@@ -25,7 +25,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
  *  - headRoles, spouseRoles  int[]  family role ids
  *  - show             array<string, bool>  address, mailing, wedding, birthday, familyPhone, familyWork,
  *                     familyCell, personalPhone, personalWork, personalCell, personalEmail,
- *                     personalWorkEmail, photo
+ *                     personalWorkEmail, photo, classification
  *  - customFieldOrders  int[]  custom_Order of the person custom fields to print (only those the user may see are used)
  *
  * @phpstan-type Line array{text: string, level: int}
@@ -241,6 +241,24 @@ class DirectoryReportService
     }
 
     /**
+     * Opt-in classification line (issue #7286). Printed per person, like phone or email.
+     *
+     * @return list<array{text: string, level: int}>
+     */
+    private function classificationLines(Person $person): array
+    {
+        if (!$this->on('classification')) {
+            return [];
+        }
+        $name = (string) $person->getClassificationName();
+        if ($name === '') {
+            return [];
+        }
+
+        return [['text' => gettext('Classification') . ': ' . gettext($name), 'level' => 1]];
+    }
+
+    /**
      * @return list<array{text: string, level: int}>
      */
     private function customLines(Person $person, int $level): array
@@ -358,7 +376,7 @@ class DirectoryReportService
         if ($family !== null) {
             $lines = array_merge($lines, $this->weddingLines($family));
         }
-        $lines = array_merge($lines, $this->customLines($person, 1));
+        $lines = array_merge($lines, $this->classificationLines($person), $this->customLines($person, 1));
 
         // An entry with nothing to print is left out; the address option alone keeps the name.
         if ($lines === [] && !$this->on('address') && $this->birthday($person) === '' && $this->photo($person) === '') {
@@ -402,7 +420,7 @@ class DirectoryReportService
         foreach (array_merge($namedPeople, $others) as $person) {
             $label = $this->memberLabel($person, (string) $lastName);
             $lines[] = ['text' => $label, 'level' => 0];
-            $lines = array_merge($lines, $this->personalLines($person), $this->customLines($person, 1));
+            $lines = array_merge($lines, $this->personalLines($person), $this->classificationLines($person), $this->customLines($person, 1));
         }
 
         return ['sort' => (string) $family->getName(), 'name' => $name, 'lines' => $lines, 'photo' => $this->photo($family)];
